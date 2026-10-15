@@ -1,0 +1,8 @@
+{
+  "name": "RadioSync Fútbol",
+  "description": "Sincronizador en directo de radio deportiva con streaming de TV y fútbol con hasta 180s de retardo y AudioWorklet.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

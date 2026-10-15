@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-digital: 'Chakra Petch', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  
+  html, body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #080c14;
+    color: #f1f5f9;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  /* Ocultar barra de scroll en Chrome, Safari y navegadores basados en Chromium */
+  *::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+    height: 0px;
+    background: transparent;
+  }
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+}
+
+.font-digital {
+  font-family: var(--font-digital);
+}
+
+.font-mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Sport Range Slider */
+input[type=range].sport-slider {
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+input[type=range].sport-slider:focus {
+  outline: none;
+}
+
+input[type=range].sport-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 28px;
+  width: 28px;
+  border-radius: 9999px;
+  background: #10b981;
+  border: 3px solid #064e3b;
+  cursor: grab;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  margin-top: -9px;
+}
+
+input[type=range].sport-slider:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+  cursor: grabbing;
+  box-shadow: 0 0 25px rgba(52, 211, 153, 0.9);
+}
+
+input[type=range].sport-slider::-moz-range-thumb {
+  height: 28px;
+  width: 28px;
+  border-radius: 9999px;
+  background: #10b981;
+  border: 3px solid #064e3b;
+  cursor: grab;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.7);
+}
+
+/* Subtle stadium turf pattern background */
+.turf-pattern {
+  background-color: #06110a;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 60%),
+    radial-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px;
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.animate-float-subtle {
+  animation: float-subtle 2.2s ease-in-out infinite;
+}
