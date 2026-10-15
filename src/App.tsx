@@ -1257,6 +1257,94 @@ export default function App() {
         </form>
       </section>
 
+      {/* --- BARRA DE CONTROL PRINCIPAL: ESCUCHAR EN DIRECTO Y VOLUMEN --- */}
+      <section className="relative z-10 mt-3 bg-slate-900/90 border border-emerald-950/80 p-3 rounded-2xl shadow-xl backdrop-blur-md">
+        <div className="grid grid-cols-12 gap-2 items-center">
+          {/* Control de Volumen y Silencio (Ampliado para mayor margen de movimiento táctil) */}
+          <div className="col-span-6 flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-2.5 py-2 rounded-xl">
+            <button
+              onClick={toggleMute}
+              className="text-slate-300 hover:text-white p-0.5 shrink-0 transition"
+              title={isMuted ? 'Desmutear' : 'Mutear'}
+            >
+              {isMuted || volume === 0 ? (
+                <VolumeX className="w-4 h-4 text-red-400" />
+              ) : (
+                <Volume2 className="w-4 h-4 text-emerald-400" />
+              )}
+            </button>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={isMuted ? 0 : volume}
+              onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+              aria-label="Control de volumen"
+              className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+            />
+            <span className="text-[10px] font-mono-num font-bold text-slate-400 shrink-0 w-6 text-right">
+              {isMuted ? '0%' : `${Math.round(volume * 100)}%`}
+            </span>
+          </div>
+
+          {/* BOTÓN PRINCIPAL REPRODUCIR / PAUSAR (Más estrecho y proporcionado) */}
+          <button
+            onClick={togglePlay}
+            disabled={isLoading}
+            className={`col-span-4 font-black py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition text-xs sm:text-sm tracking-wide ${
+              isPlaying
+                ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20'
+                : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/25 ring-1 ring-emerald-400/40'
+            }`}
+          >
+            {isLoading ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin shrink-0" />
+                <span className="text-[11px] truncate">CONECTANDO</span>
+              </>
+            ) : isPlaying ? (
+              <>
+                <Pause className="w-4 h-4 fill-current shrink-0" />
+                <span className="truncate">PAUSAR</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-4 h-4 fill-current shrink-0" />
+                <span className="truncate">EN DIRECTO</span>
+              </>
+            )}
+          </button>
+
+          {/* Reset Retardo a 0s (Más compacto) */}
+          <button
+            onClick={() => handleDelayChange(0)}
+            className="col-span-2 bg-slate-950/80 hover:bg-slate-800 text-slate-300 rounded-xl flex flex-col items-center justify-center border border-slate-800 active:scale-95 transition py-2 px-1"
+            title="Poner retardo a 0s (directo)"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-[9px] mt-0.5 font-bold">0s</span>
+          </button>
+        </div>
+
+        {/* Estado en vivo */}
+        <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 px-1">
+          <div className="flex items-center gap-2">
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isPlaying ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'
+              }`}
+            />
+            <span className="truncate max-w-[200px]">
+              {isPlaying
+                ? `${selectedStation.name} (+${delay.toFixed(1)}s)`
+                : 'Selecciona emisora y pulsa reproducir'}
+            </span>
+          </div>
+          <span className="text-[10px]">Búfer 180s Estéreo</span>
+        </div>
+      </section>
+
       {/* --- SECCIÓN 2: DISPLAY DE RETARDO Y CONTROL (CON BALÓN Y ÁREA DE FÚTBOL) --- */}
       <section className="relative z-10 mt-3 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 p-4 sm:p-5 rounded-3xl border border-emerald-950/80 shadow-2xl relative overflow-hidden backdrop-blur-md">
         {/* Filigrana sutil de medialuna y área de penalti de estadio */}
@@ -1600,88 +1688,9 @@ export default function App() {
         )}
       </section>
 
-      {/* --- SECCIÓN 4: BARRA DE CONTROL PRINCIPAL --- */}
-      <footer className="relative z-10 mt-4 pt-2">
-        <div className="grid grid-cols-12 gap-2">
-          {/* Control de Volumen y Silencio */}
-          <div className="col-span-3 flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 p-2 rounded-2xl">
-            <button
-              onClick={toggleMute}
-              className="text-slate-300 hover:text-white p-1"
-              title={isMuted ? 'Desmutear' : 'Mutear'}
-            >
-              {isMuted || volume === 0 ? (
-                <VolumeX className="w-4 h-4 text-red-400" />
-              ) : (
-                <Volume2 className="w-4 h-4 text-emerald-400" />
-              )}
-            </button>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={isMuted ? 0 : volume}
-              onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-            />
-          </div>
-
-          {/* BOTÓN PRINCIPAL REPRODUCIR / PAUSAR */}
-          <button
-            onClick={togglePlay}
-            disabled={isLoading}
-            className={`col-span-6 font-black py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 shadow-xl active:scale-95 transition text-sm sm:text-base tracking-wide ${
-              isPlaying
-                ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20'
-                : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/25'
-            }`}
-          >
-            {isLoading ? (
-              <>
-                <RefreshCw className="w-5 h-5 animate-spin" />
-                <span>CONECTANDO...</span>
-              </>
-            ) : isPlaying ? (
-              <>
-                <Pause className="w-5 h-5 fill-current" />
-                <span>PAUSAR RADIO</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-5 h-5 fill-current" />
-                <span>ESCUCHAR EN DIRECTO</span>
-              </>
-            )}
-          </button>
-
-          {/* Reset Retardo a 0s */}
-          <button
-            onClick={() => handleDelayChange(0)}
-            className="col-span-3 bg-slate-900/90 hover:bg-slate-800 text-slate-300 rounded-2xl flex flex-col items-center justify-center border border-slate-800 active:scale-95 transition py-2"
-            title="Poner retardo a 0s"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-[10px] mt-0.5 font-bold">Directo 0s</span>
-          </button>
-        </div>
-
-        {/* Estado en vivo */}
-        <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 px-1">
-          <div className="flex items-center gap-2">
-            <span
-              className={`w-2 h-2 rounded-full ${
-                isPlaying ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'
-              }`}
-            />
-            <span className="truncate max-w-[200px]">
-              {isPlaying
-                ? `${selectedStation.name} (+${delay.toFixed(1)}s)`
-                : 'Selecciona emisora y pulsa reproducir'}
-            </span>
-          </div>
-          <span>Búfer 180s Estéreo</span>
-        </div>
+      {/* --- PIE DE PÁGINA DISCRETO --- */}
+      <footer className="relative z-10 mt-4 mb-2 text-center text-[10px] text-slate-500/80">
+        <p>Sincronizador Deportes TV & Radio • Búfer de audio continuo 180s</p>
       </footer>
 
       {/* --- MODAL PWA IOS --- */}
